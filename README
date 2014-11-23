@@ -1,3 +1,5 @@
-vladgh-s3fs
+clambertus/puppet-s3fs
 
-This is the vladgh-s3fs module.
+Forked from chloeandisabel/puppet-s3fs
+
+Updated to not attempt to install fuse-utils on Ubuntu 14+, as it no longer exists.
