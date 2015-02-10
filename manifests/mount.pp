@@ -42,23 +42,26 @@
 define s3fs::mount (
   $bucket,
   $mount_point,
-  $ensure      = 'present',
-  $s3url       = 'https://s3.amazonaws.com',
-  $default_acl = 'private',
-  $uid         = '0',
-  $gid         = '0',
-  $mode        = '0660',
-  $atboot      = 'true',
-  $device      = "s3fs#${bucket}",
-  $fstype      = 'fuse',
-  $remounts    = 'false',
-  $cache       = '/tmp/aws_s3_cache'
+  $ensure            = 'present',
+  $s3url             = 'https://s3.amazonaws.com',
+  $default_acl       = 'private',
+  $uid               = '0',
+  $gid               = '0',
+  $mode              = '0660',
+  $atboot            = 'true',
+  $device            = "s3fs#${bucket}",
+  $fstype            = 'fuse',
+  $remounts          = 'false',
+  $cache             = '/tmp/aws_s3_cache',
+  $retries           = '10',
+  $connect_timeout   = '30',
+  $readwrite_timeout = '30',
 ) {
 
   Class['s3fs'] -> S3fs::Mount["${name}"]
 
   # Declare this here, otherwise, uid, guid, etc.. are not initialized in the correct order.
-  $options = "allow_other,uid=${uid},gid=${gid},default_acl=${default_acl},use_cache=${cache},url=${s3url}"
+  $options = "allow_other,uid=${uid},gid=${gid},default_acl=${default_acl},use_cache=${cache},url=${s3url},retries=${retries},connect_timeout=${connect_timeout},readwrite_timeout=${readwrite_timeout}"
 
   case $ensure {
     present, defined, unmounted, mounted: {
