@@ -75,7 +75,7 @@ class s3fs (
   }
 
   # Autogen s3fs build:
-  exec { 's3fs_configure':
+  exec { 's3fs_autogen':
     creates     => "${download_dir}/s3fs-fuse-${version}/configure",
     cwd         => "${download_dir}/s3fs-fuse-${version}",
     command     => "${download_dir}/s3fs-fuse-${version}/autogen.sh",
