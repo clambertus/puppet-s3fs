@@ -51,7 +51,7 @@ class s3fs (
     mode    => '0640',
   }
 
-  Exec['s3fs_tar_gz'] ~> Exec['s3fs_extract'] ~> Exec['s3fs_configure'] ~> Exec['s3fs_make'] ~> Exec['s3fs_install']
+  Exec['s3fs_tar_gz'] ~> Exec['s3fs_extract'] ~> Exec['s3fs_autogen'] ~> Exec['s3fs_configure'] ~> Exec['s3fs_make'] ~> Exec['s3fs_install']
 
   # Distribute s3fs source from within module to control version (could
   # also download from Google directly):
