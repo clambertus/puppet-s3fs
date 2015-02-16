@@ -56,7 +56,7 @@ class s3fs (
   # Distribute s3fs source from within module to control version (could
   # also download from Google directly):
   exec { 's3fs_tar_gz':
-    command   => "/usr/bin/curl -o ${download_dir}/s3fs-fuse-${version}.tar.gz ${download_url}/v${version}.tar.gz",
+    command   => "/usr/bin/curl -L -o ${download_dir}/s3fs-fuse-${version}.tar.gz ${download_url}/v${version}.tar.gz",
     logoutput => true,
     timeout   => 300,
     #path      => '/sbin:/bin:/usr/local/bin:/usr/local/sbin',
