@@ -56,7 +56,7 @@ class s3fs (
   # Distribute s3fs source from within module to control version (could
   # also download from Google directly):
   exec { 's3fs_tar_gz':
-    command   => "/usr/bin/curl -o ${download_dir}/s3fs-${version}.tar.gz ${download_url}/s3fs-${version}.tar.gz",
+    command   => "/usr/bin/curl -o ${download_dir}/s3fs-fuse-${version}.tar.gz ${download_url}/v${version}.tar.gz",
     logoutput => true,
     timeout   => 300,
     #path      => '/sbin:/bin:/usr/local/bin:/usr/local/sbin',
@@ -65,20 +65,30 @@ class s3fs (
   
   # Extract s3fs source:
   exec { 's3fs_extract':
-    creates   => "${download_dir}/s3fs-${version}",
+    creates   => "${download_dir}/s3fs-fuse-${version}",
     cwd         => "${download_dir}",
-    command   => "tar --no-same-owner -xzf ${download_dir}/s3fs-$version.tar.gz",
+    command   => "tar --no-same-owner -xzf ${download_dir}/s3fs-fuse-$version.tar.gz",
     logoutput => true,
     timeout   => 300,
     path      => '/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin',
     refreshonly => true,
   }
 
+  # Autogen s3fs build:
+  exec { 's3fs_configure':
+    creates     => "${download_dir}/s3fs-fuse-${version}/configure",
+    cwd         => "${download_dir}/s3fs-fuse-${version}",
+    command     => "${download_dir}/s3fs-fuse-${version}/autogen.sh",
+    logoutput   => true,
+    timeout     => 300,
+    refreshonly => true,
+  }
+
   # Configure s3fs build:
   exec { 's3fs_configure':
-    creates     => "${download_dir}/s3fs-${version}/config.status",
-    cwd         => "${download_dir}/s3fs-${version}",
-    command     => "${download_dir}/s3fs-${version}/configure",
+    creates     => "${download_dir}/s3fs-fuse-${version}/config.status",
+    cwd         => "${download_dir}/s3fs-fuse-${version}",
+    command     => "${download_dir}/s3fs-fuse-${version}/configure",
     logoutput   => true,
     timeout     => 300,
     refreshonly => true,
@@ -86,8 +96,8 @@ class s3fs (
 
   # Build s3fs:
   exec { 's3fs_make':
-    creates     => "${download_dir}/s3fs-${version}/src/s3fs",
-    cwd         => "${download_dir}/s3fs-${version}",
+    creates     => "${download_dir}/s3fs-fuse-${version}/src/s3fs",
+    cwd         => "${download_dir}/s3fs-fuse-${version}",
     command     => "/usr/bin/make",
     logoutput   => true,
     timeout     => 300,
@@ -97,7 +107,7 @@ class s3fs (
   # Install s3fs
   exec { 's3fs_install':
     command     => "/usr/bin/make install",
-    cwd         => "${download_dir}/s3fs-${version}",
+    cwd         => "${download_dir}/s3fs-fuse-${version}",
     logoutput   => true,
     timeout     => 300,
     refreshonly => true,

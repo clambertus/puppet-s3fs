@@ -19,6 +19,7 @@ class s3fs::dependencies {
       'libfuse-dev', 
       'libcurl4-openssl-dev',
       'libxml2-dev',
+      'automake',
       # 'mime-support',
       ],
   }
