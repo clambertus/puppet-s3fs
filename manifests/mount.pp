@@ -79,7 +79,7 @@ define s3fs::mount (
 
   file { $mount_point:
     ensure  => $ensure_dir,
-    recurse => true,
+    recurse => false,
     force   => true,
     owner   => $owner,
     group   => $group,
